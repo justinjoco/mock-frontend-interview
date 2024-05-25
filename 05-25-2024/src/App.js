@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 /*
 // Create a vending machine function that takes in a list of items and a list of coins.
 // The vending machine should allow the user to select an item and insert coins to pay for the item.
@@ -67,7 +67,7 @@ function App() {
   
   //States
   const [total, setTotal] = useState(0)
-  const [coinsUsed, setCoinsUsed] = useState({})
+  const coinsUsedRef = useRef({})
   const [submitDisplay, setSubmitDisplay] = useState("Submit display")
 
   // Item display
@@ -81,14 +81,14 @@ function App() {
   function handleCoinClick(event){
     const coinValue = Number(event.target.value)
     setTotal(total + coinValue)
-    const newCoinsUsed = {...coinsUsed}
+    const newCoinsUsed = {...coinsUsedRef.current}
     const numCoins = newCoinsUsed[coinValue] 
     if (!numCoins){
       newCoinsUsed[coinValue] = 1
     } else{
       newCoinsUsed[coinValue] += 1
     }
-    setCoinsUsed(newCoinsUsed)
+    coinsUsedRef.current = newCoinsUsed
   }
 
   function handleItemButtonClick(event){
@@ -99,6 +99,7 @@ function App() {
       setSubmitDisplay(`You have bought this item! Your change is ${(total - itemValue).toFixed(2)}`)
     } else{
       let returnStr = ""
+      const coinsUsed = coinsUsedRef.current
       for (let coin in coinsUsed){
         returnStr += `Coin value: ${coin}, number used: ${coinsUsed[coin]}\n`
       } 
@@ -108,7 +109,7 @@ function App() {
       setSubmitDisplay(`You do not have enough money! ${returnStr}`)
     }
     setTotal(0)
-    setCoinsUsed({})
+    coinsUsedRef.current = {}
   }
 
   // Coin buttons -> onclick event
