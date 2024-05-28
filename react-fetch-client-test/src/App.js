@@ -1,6 +1,6 @@
-import logo from './logo.svg';
-import {useState, useEffect} from 'react'
 import './App.css';
+import {Counter} from "./Counter"
+import { RandomUser } from './RandomUser';
 /* https://httpbin.org/#/
 https://httpbin.org/get
 https://httpbin.org/put
@@ -33,61 +33,7 @@ const SomeContext = createContext(initalValue)
 useContext: use to grab context of some parent, and use it to modify some property of current prop
 const value = useContext(SomeContext)
 */
-
-function Counter(){
-  const [counter, setCounter] = useState(0)
-
-  function handleIncrementCounterButton(){
-    setCounter(counter => counter + 1)
-  }
-  function handleResetCounterButton(){
-    setCounter(0)
-  }
-
-  return (
-  <div>
-    <h1>Counter: {counter}</h1>
-    <button onClick={() => handleIncrementCounterButton()}>Increment counter</button>
-    <button onClick={() => handleResetCounterButton()}>Reset counter</button>
-  </div>
-  )
-}
-
-function RandomUser(){
-  const [shouldFetchUser, setShouldFetchUser] = useState(false)
-  const [userInfo, setUserInfo] = useState("No user fetched")
-
-  useEffect(() => {
-    async function fetchUser(){
-      const response = await fetch("https://randomuser.me/api")
-      const user = await response.json()
-      setUserInfo(JSON.stringify(user))
-    }
-
-    if (shouldFetchUser){
-      fetchUser()
-    }
-
-    return () => {
-      setShouldFetchUser(false)
-    }
-  }, [shouldFetchUser])
-
-  function handleFetchRandomUserButton(){
-    setShouldFetchUser(true)
-  }
-
-  return (
-    <div>
-      <h1>Random user</h1>
-      <button onClick={() => {handleFetchRandomUserButton()}}>Fetch random user</button>
-      <p>{userInfo}</p>
-    </div>
-  )
-}
-
 function App() {
-
   return (
     <div className="App">
       <Counter/>
