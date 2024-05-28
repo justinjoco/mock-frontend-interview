@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import {useState, useEffect} from 'react'
 import './App.css';
 /* https://httpbin.org/#/
 https://httpbin.org/get
@@ -33,22 +34,49 @@ useContext: use to grab context of some parent, and use it to modify some proper
 const value = useContext(SomeContext)
 */
 function App() {
+  const [counter, setCounter] = useState(0)
+  const [shouldFetchUser, setShouldFetchUser] = useState(false)
+  const [userInfo, setUserInfo] = useState("No user fetched")
+
+  useEffect(() => {
+    async function fetchUser(){
+      const response = await fetch("https://randomuser.me/api")
+      const user = await response.json()
+      setUserInfo(JSON.stringify(user))
+    }
+
+    if (shouldFetchUser){
+      fetchUser()
+    }
+
+    return () => {
+      setShouldFetchUser(false)
+    }
+  }, [shouldFetchUser])
+
+  function handleIncrementCounterButton(){
+    setCounter(counter => counter + 1)
+  }
+  function handleResetCounterButton(){
+    setCounter(0)
+  }
+
+  function handleFetchRandomUserButton(){
+    setShouldFetchUser(true)
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+      <h1>Counter: {counter}</h1>
+      <button onClick={() => handleIncrementCounterButton()}>Increment counter</button>
+      <button onClick={() => handleResetCounterButton()}>Reset counter</button>
+      </div>
+      <div>
+        <h1>Random user</h1>
+        <button onClick={() => {handleFetchRandomUserButton()}}>Fetch random user</button>
+        <p>{userInfo}</p>
+      </div>
+
     </div>
   );
 }
