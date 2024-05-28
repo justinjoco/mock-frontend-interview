@@ -33,8 +33,27 @@ const SomeContext = createContext(initalValue)
 useContext: use to grab context of some parent, and use it to modify some property of current prop
 const value = useContext(SomeContext)
 */
-function App() {
+
+function Counter(){
   const [counter, setCounter] = useState(0)
+
+  function handleIncrementCounterButton(){
+    setCounter(counter => counter + 1)
+  }
+  function handleResetCounterButton(){
+    setCounter(0)
+  }
+
+  return (
+  <div>
+    <h1>Counter: {counter}</h1>
+    <button onClick={() => handleIncrementCounterButton()}>Increment counter</button>
+    <button onClick={() => handleResetCounterButton()}>Reset counter</button>
+  </div>
+  )
+}
+
+function RandomUser(){
   const [shouldFetchUser, setShouldFetchUser] = useState(false)
   const [userInfo, setUserInfo] = useState("No user fetched")
 
@@ -54,29 +73,25 @@ function App() {
     }
   }, [shouldFetchUser])
 
-  function handleIncrementCounterButton(){
-    setCounter(counter => counter + 1)
-  }
-  function handleResetCounterButton(){
-    setCounter(0)
-  }
-
   function handleFetchRandomUserButton(){
     setShouldFetchUser(true)
   }
+
+  return (
+    <div>
+      <h1>Random user</h1>
+      <button onClick={() => {handleFetchRandomUserButton()}}>Fetch random user</button>
+      <p>{userInfo}</p>
+    </div>
+  )
+}
+
+function App() {
+
   return (
     <div className="App">
-      <div>
-      <h1>Counter: {counter}</h1>
-      <button onClick={() => handleIncrementCounterButton()}>Increment counter</button>
-      <button onClick={() => handleResetCounterButton()}>Reset counter</button>
-      </div>
-      <div>
-        <h1>Random user</h1>
-        <button onClick={() => {handleFetchRandomUserButton()}}>Fetch random user</button>
-        <p>{userInfo}</p>
-      </div>
-
+      <Counter/>
+      <RandomUser/>
     </div>
   );
 }
